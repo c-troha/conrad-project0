@@ -7,6 +7,8 @@ namespace VideoGameOrderSystem.Library
 {
     public class Location
     {
+        public int LocationId { get; set; }
+
         private List<Product> _inventory = new List<Product>();
 
         public void AddProductToInventory(Product p)
