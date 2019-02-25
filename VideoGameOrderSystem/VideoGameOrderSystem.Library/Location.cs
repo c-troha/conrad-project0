@@ -7,7 +7,49 @@ namespace VideoGameOrderSystem.Library
 {
     public class Location
     {
-        private List<Product> Inventory { get; set; } = new List<Product>();
+        private List<Product> _inventory = new List<Product>();
+
+        public void AddProductToInventory(Product p)
+        {
+            _inventory.Add(p);
+        }
+
+        public void RemoveProductFromInventory(Product p)
+        {
+            _inventory.Remove(p);
+        }
+
+        public void AddItemsToInventory( int id, int amount )
+        {
+            _inventory.First(i => i.Id == id).Quantity += amount;
+        }
+
+        public void RemoveItemsFromInventory(int id, int amount)
+        {
+            _inventory.First(i => i.Id == id).Quantity -= amount;
+        }
+
+        public bool Contains(Product p)
+        { 
+            if(_inventory.Contains(p))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool IsEmpty()
+        {
+            if (_inventory.Count == 0) return true;
+            return false;
+        }
+
+        public int CheckInventory(int id)
+        {
+            return _inventory.First(i => i.Id == id).Quantity;
+        }
+
 
         public bool PlaceOrder(Order order)
         {
@@ -18,39 +60,23 @@ namespace VideoGameOrderSystem.Library
                 throw new ArgumentException("Order must contain at least one product.", nameof(order));
             }
 
-            if (!CheckInventory(order))
+            foreach (Product p in order.products)
             {
-                Console.WriteLine("We could not place your order. Please adjust the order and try again.");
-                return false;
+                if (CheckInventory(p.Id) == 0)
+                {
+                    Console.WriteLine($"We could not place your order, as {nameof(p.Name)} is out of stock.");
+                    return false;
+                }
             }
 
-            for (int i = 0; i < count; i++)
+            foreach (Product p in order.products)
             {
-                
+                RemoveItemsFromInventory(p.Id, p.Quantity);
             }
 
 
             return false;
         }
 
-        private bool CheckInventory(Order order)
-        {
-            HashSet<int> ids = new HashSet<int>(order.products.Select(s => s.Id));
-            var matches = Inventory.Where(p => ids.Contains(p.Id));
-
-            // product entered in order doesn't exist in the inventory
-            if (matches.Count() == 0) return false;
-
-            for (int i = 0; i < matches.Count(); i++)
-            {
-                if()
-                {
-                    Console.WriteLine($"{order.products[i].Name} is currently out of stock.");
-                    return false;
-                }
-            }
-
-            return true;
-        }
     }
 }

@@ -6,8 +6,26 @@ namespace VideoGameOrderSystem.Library
 {
     public class Product
     {
-        public int Quantity { get; set; } = 0;
-        public int Id { get; set; } = 0;
+        private int _id;
+
+        public int Quantity = 0;
         public string Name { get; set; }
+
+        public int Id
+        {
+            get { return _id; }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(@"{nameof(value)} must be nonnegative");
+                }
+
+                _id = value;
+            }
+        }
+
+
+
     }
 }

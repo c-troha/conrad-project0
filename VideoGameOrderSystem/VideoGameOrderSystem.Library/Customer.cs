@@ -18,7 +18,7 @@ namespace VideoGameOrderSystem.Library
             {
                 if (value == null)
                 {
-                    throw new ArgumentNullException("First Name cannot be empty.", nameof(value));
+                    throw new ArgumentNullException("First Name must contain a value.", nameof(value));
                 }
 
                 _firstName = value;
@@ -35,7 +35,7 @@ namespace VideoGameOrderSystem.Library
             {
                 if (value == null)
                 {
-                    throw new ArgumentNullException("First Name cannot be empty.", nameof(value));
+                    throw new ArgumentNullException("Last Name must contain a value.", nameof(value));
                 }
 
                 _lastName = value;
