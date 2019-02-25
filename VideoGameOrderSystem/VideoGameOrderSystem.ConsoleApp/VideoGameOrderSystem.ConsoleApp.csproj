@@ -5,4 +5,8 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\VideoGameOrderSystem.Library\VideoGameOrderSystem.Library.csproj" />
+  </ItemGroup>
+
 </Project>

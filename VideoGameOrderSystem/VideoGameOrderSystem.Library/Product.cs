@@ -4,7 +4,10 @@ using System.Text;
 
 namespace VideoGameOrderSystem.Library
 {
-    class Product
+    public class Product
     {
+        public int Quantity { get; set; } = 0;
+        public int Id { get; set; } = 0;
+        public string Name { get; set; }
     }
 }
