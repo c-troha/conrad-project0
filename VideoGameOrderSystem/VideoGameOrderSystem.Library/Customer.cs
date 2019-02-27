@@ -47,7 +47,5 @@ namespace VideoGameOrderSystem.Library
         public DateTime birthday { get; set; }
 
         public Location StoreLocation { get; set; }
-
-        List<Order> Orders { get; set; } = new List<Order>();
     }
 }

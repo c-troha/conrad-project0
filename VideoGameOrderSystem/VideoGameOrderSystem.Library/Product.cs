@@ -6,7 +6,7 @@ namespace VideoGameOrderSystem.Library
 {
     public class Product
     {
-        private int _id;
+        private int _id = 0;
         private float _price;
 
         public int Quantity = 0;

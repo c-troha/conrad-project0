@@ -8,6 +8,7 @@ namespace VideoGameOrderSystem.Library
     public class Location
     {
         private int _locationId;
+        public string Name { get; set; }
         private List<Product> _inventory = new List<Product>();
 
         public OrderHistory History = new OrderHistory();
@@ -42,9 +43,9 @@ namespace VideoGameOrderSystem.Library
             _inventory.First(i => i.Id == id).Quantity -= amount;
         }
 
-        public bool Contains(Product p)
+        public bool Contains(int pId)
         { 
-            if(_inventory.Contains(p))
+            if(_inventory.Any(p => p.Id == pId))
             {
                 return true;
             }
@@ -54,7 +55,7 @@ namespace VideoGameOrderSystem.Library
 
         public bool IsEmpty()
         {
-            if (_inventory.Count == 0) return true;
+            if (_inventory.Any()) return true;
             return false;
         }
 
@@ -66,9 +67,7 @@ namespace VideoGameOrderSystem.Library
 
         public bool CanPlaceOrder(Order order)
         {
-            int count = order.Products.Count;
-
-            if(count == 0)
+            if(order.Products.Any())
             {
                 throw new ArgumentException("Order must contain at least one product.", nameof(order));
             }
@@ -83,6 +82,19 @@ namespace VideoGameOrderSystem.Library
             }
 
             return true;
+        }
+
+        public void PlaceOrder(Order order)
+        {
+            if (CanPlaceOrder(order))
+            {
+                foreach (Product p in order.Products)
+                {
+                    RemoveItemsFromInventory(p.Id, p.Quantity);
+                }
+
+                History.orders.Add(order);
+            }
         }
 
     }

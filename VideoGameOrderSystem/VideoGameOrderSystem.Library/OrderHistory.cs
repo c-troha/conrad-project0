@@ -6,6 +6,6 @@ namespace VideoGameOrderSystem.Library
 {
     public class OrderHistory
     {
-        public List<Order> History = new List<Order>();
+        public List<Order> orders = new List<Order>();
     }
 }

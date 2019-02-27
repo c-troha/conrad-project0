@@ -43,7 +43,7 @@ namespace VideoGameOrderSystem.Test
             loc.AddProductToInventory(p);
 
             // Assert
-            Assert.True(loc.Contains(p));
+            Assert.True(loc.Contains(p.Id));
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace VideoGameOrderSystem.Test
             loc.RemoveProductFromInventory(p);
 
             // Assert
-            Assert.False(loc.Contains(p));
+            Assert.False(loc.Contains(p.Id));
         }
 
         [Theory]
@@ -77,7 +77,7 @@ namespace VideoGameOrderSystem.Test
             loc.AddItemsToInventory(p.Id, inc);
 
             // Assert
-            Assert.True(loc.CheckInventory(p.Id) == inc + p.Quantity);
+            Assert.True(loc.CheckInventory(p.Id) == inc + 1);
         }
 
         [Theory]
@@ -96,7 +96,7 @@ namespace VideoGameOrderSystem.Test
             loc.RemoveItemsFromInventory(p.Id, dec);
 
             // Assert
-            Assert.True(loc.CheckInventory(p.Id) == p.Quantity-dec);
+            Assert.True(loc.CheckInventory(p.Id) == 10-dec);
         }
 
 
