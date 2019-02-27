@@ -7,9 +7,20 @@ namespace VideoGameOrderSystem.Library
 {
     public class Location
     {
-        public int LocationId { get; set; }
-
+        private int _locationId;
         private List<Product> _inventory = new List<Product>();
+
+        public OrderHistory History = new OrderHistory();
+
+        public int LocationId
+        {
+            get => _locationId;
+
+            set
+            {
+                _locationId = value;
+            }
+        }
 
         public void AddProductToInventory(Product p)
         {
@@ -53,16 +64,16 @@ namespace VideoGameOrderSystem.Library
         }
 
 
-        public bool PlaceOrder(Order order)
+        public bool CanPlaceOrder(Order order)
         {
-            int count = order.products.Count;
+            int count = order.Products.Count;
 
             if(count == 0)
             {
                 throw new ArgumentException("Order must contain at least one product.", nameof(order));
             }
 
-            foreach (Product p in order.products)
+            foreach (Product p in order.Products)
             {
                 if (CheckInventory(p.Id) == 0)
                 {
@@ -71,13 +82,7 @@ namespace VideoGameOrderSystem.Library
                 }
             }
 
-            foreach (Product p in order.products)
-            {
-                RemoveItemsFromInventory(p.Id, p.Quantity);
-            }
-
-
-            return false;
+            return true;
         }
 
     }
