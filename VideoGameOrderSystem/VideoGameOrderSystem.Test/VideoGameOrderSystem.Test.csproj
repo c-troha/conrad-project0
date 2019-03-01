@@ -13,7 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VideoGameOrderSystem.Library\VideoGameOrderSystem.Library.csproj" />
+    <ProjectReference Include="..\VideoGameOrderSystem.ConsoleApp\VideoGameOrderSystem.ConsoleApp.csproj" />
+    <ProjectReference Include="..\VideoGameOrderSystem.DataAccess\VideoGameOrderSystem.DataAccess.csproj" />
+    <ProjectReference Include="..\VideoGameOrderSystem.Library\VideoGameOrderSystem.Models.csproj" />
   </ItemGroup>
 
 </Project>

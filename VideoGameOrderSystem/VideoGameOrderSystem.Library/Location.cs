@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace VideoGameOrderSystem.Library
+namespace VideoGameOrderSystem.Models
 {
     public class Location
     {
         private int _locationId;
         public string Name { get; set; }
         private List<Product> _inventory = new List<Product>();
-
-        public OrderHistory History = new OrderHistory();
 
         public int LocationId
         {
@@ -84,18 +82,6 @@ namespace VideoGameOrderSystem.Library
             return true;
         }
 
-        public void PlaceOrder(Order order)
-        {
-            if (CanPlaceOrder(order))
-            {
-                foreach (Product p in order.Products)
-                {
-                    RemoveItemsFromInventory(p.Id, p.Quantity);
-                }
-
-                History.orders.Add(order);
-            }
-        }
 
     }
 }

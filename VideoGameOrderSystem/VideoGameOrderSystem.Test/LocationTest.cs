@@ -1,5 +1,5 @@
 using System;
-using VideoGameOrderSystem.Library;
+using VideoGameOrderSystem.Models;
 using Xunit;
 
 namespace VideoGameOrderSystem.Test

@@ -1,14 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VideoGameOrderSystem.Library
+namespace VideoGameOrderSystem.Models
 {
     public class Customer
     {
         private string _firstName;
         private string _lastName;
 
-        public int Id { get; set; }
+        private int _id;
+
+        public int Id
+        {
+            get => _id;
+
+            set
+            {
+                _id = value;
+            }
+        }
 
         public string FirstName
         { 
@@ -44,8 +54,8 @@ namespace VideoGameOrderSystem.Library
         }
 
 
-        public DateTime birthday { get; set; }
+        public DateTime birthday = new DateTime();
 
-        public Location StoreLocation { get; set; }
+        public int storeId = 0;
     }
 }

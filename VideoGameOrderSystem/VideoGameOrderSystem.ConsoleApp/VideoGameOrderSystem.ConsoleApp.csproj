@@ -6,7 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VideoGameOrderSystem.Library\VideoGameOrderSystem.Library.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VideoGameOrderSystem.DataAccess\VideoGameOrderSystem.DataAccess.csproj" />
+    <ProjectReference Include="..\VideoGameOrderSystem.Library\VideoGameOrderSystem.Models.csproj" />
   </ItemGroup>
 
 </Project>

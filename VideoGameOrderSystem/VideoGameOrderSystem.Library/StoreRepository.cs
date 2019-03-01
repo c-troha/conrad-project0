@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace VideoGameOrderSystem.Library
+namespace VideoGameOrderSystem.Models
 {
     public class StoreRepository
     {
@@ -35,6 +35,7 @@ namespace VideoGameOrderSystem.Library
             }
 
         }
+        
         public Location GetStoreById(int id)
         {
             return _data.First(r => r.LocationId == id);
@@ -65,33 +66,25 @@ namespace VideoGameOrderSystem.Library
             store.RemoveProductFromInventory(product);
         }
 
-        public void PlaceOrder(int storeId, Order order)
+        public void AddToInventory(int storeId, int productId, int inc)
         {
-            _data.First(s => s.LocationId == storeId).CanPlaceOrder(order);
-            _data.First(s => s.LocationId == storeId).PlaceOrder(order);
+            if (!_data.First(s => s.LocationId == storeId).Contains(productId))
+            {
+                throw new InvalidOperationException($"The product with id: {productId} does not exist at this location.");
+            }
 
+            _data.First(s => s.LocationId == storeId).AddItemsToInventory(productId, inc);
         }
 
-        // I don't think I need these
-        //public void AddToInventory(Location store, int productId, int inc)
-        //{
-        //    if(!store.Contains(productId))
-        //    {
-        //        throw new InvalidOperationException($"The product with id: {productId} not exist at this location.");
-        //    }
+        public void RemoveItemFromInventory(int storeId, int productId, int dec)
+        {
+            if (!_data.First(s => s.LocationId == storeId).Contains(productId))
+            {
+                throw new InvalidOperationException($"The product with id: {productId} does not exist at this location.");
+            }
 
-        //    store.AddItemsToInventory(productId, inc);
-        //}
-
-        //public void RemoveItemFromInventory(Location store, int productId, int dec)
-        //{
-        //    if (!store.Contains(productId))
-        //    {
-        //        throw new InvalidOperationException($"The product with id: {productId} not exist at this location.");
-        //    }
-
-        //    store.RemoveItemsFromInventory(productId, dec);
-        //}
+            _data.First(s => s.LocationId == storeId).RemoveItemsFromInventory(productId, dec);
+        }
 
 
     }
