@@ -117,3 +117,17 @@ ALTER TABLE OS.IBundleItems ADD
 	CONSTRAINT FK_BundleItems_To_IProduct FOREIGN KEY (ProductID) REFERENCES OS.IProduct (ID);
 
 
+SELECT * FROM OS.Inventory;
+SELECT * FROM OS.IProduct;
+
+INSERT INTO OS.IProduct (Name, Price) VALUES
+	('Playstation 4', 299.99),
+	('Controller (PS4)', 59.99),
+	('Read Dead Redemption 2 (PS4)', 59.99)
+
+INSERT INTO OS.Inventory (StoreID, Quantity, ProductID) VALUES 
+	(1, 2, 1),
+	(1, 5, 2),
+	(1, 10, 3)
+
+INSERT INTO OS.Inventory (StoreID, Quantity, ProductID) VALUES  (1, 0, 5)

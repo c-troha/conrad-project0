@@ -54,8 +54,8 @@ namespace VideoGameOrderSystem.Models
         }
 
 
-        public DateTime birthday = new DateTime();
+        public DateTime Birthday;
 
-        public int storeId = 0;
+        public int StoreId;
     }
 }

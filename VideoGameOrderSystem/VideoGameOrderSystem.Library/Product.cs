@@ -6,10 +6,9 @@ namespace VideoGameOrderSystem.Models
 {
     public class Product
     {
-        private int _id = 0;
+        private int _id;
         private float _price;
 
-        public int Quantity = 0;
         public string Name { get; set; }
 
         public int Id  

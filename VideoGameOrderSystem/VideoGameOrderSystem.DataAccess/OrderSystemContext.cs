@@ -27,15 +27,6 @@ namespace VideoGameOrderSystem.DataAccess
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Store> Store { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=tcp:troha1902sql.database.windows.net,1433;Initial Catalog=OrderSystem;Persist Security Info=False;User ID=ctroha;Password=Samurai7!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
