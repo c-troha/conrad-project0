@@ -19,23 +19,70 @@ namespace VideoGameOrderSystem.DataAccess.Repos
         {
             var newCustomer = new Models.Customer();
 
-            Console.WriteLine("Please enter your first name:");
-            newCustomer.FirstName = Console.ReadLine();
+            while (true)
+            {
+                Console.WriteLine("Enter your first name:");
+                string fName = Console.ReadLine();
 
-            Console.WriteLine("Please enter your last name:");
-            newCustomer.LastName = Console.ReadLine();
+                if(fName.Equals("") || fName.Equals(null))
+                {
+                    Console.WriteLine("Invalid name...");
+                    Console.WriteLine();
+                }
+                else
+                {
+                    newCustomer.FirstName = fName;
+                    break;
+                }
+            }
 
-            Console.WriteLine("Please enter your birthday:");
-            Console.WriteLine("Month:");
-            int month = int.Parse(Console.ReadLine());
+            while (true)
+            {
+                Console.WriteLine("Enter your last name:");
+                string lName = Console.ReadLine();
 
-            Console.WriteLine("Day:");
-            int day = int.Parse(Console.ReadLine());
+                if (lName.Equals("") || lName.Equals(null))
+                {
+                    Console.WriteLine("Invalid name...");
+                    Console.WriteLine();
+                }
+                else
+                {
+                    newCustomer.LastName = lName;
+                    break;
+                }
+            }
 
-            Console.WriteLine("Year:");
-            int year = int.Parse(Console.ReadLine());
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine("Enter your birthday:");
+                    Console.WriteLine("Month:");
+                    int month = int.Parse(Console.ReadLine());
 
-            newCustomer.Birthday = new DateTime(year, month, day);
+                    Console.WriteLine("Day:");
+                    int day = int.Parse(Console.ReadLine());
+
+                    Console.WriteLine("Year:");
+                    int year = int.Parse(Console.ReadLine());
+                    newCustomer.Birthday = new DateTime(year, month, day);
+                    break;
+                }
+                catch(FormatException fe)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Invalid Format...");
+                    Console.WriteLine();
+                }
+                catch(ArgumentOutOfRangeException e)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Invalid birthday...");
+                    Console.WriteLine();
+                }
+
+            }
 
             newCustomer.StoreId = _dbContext.Store.First().Id;
 

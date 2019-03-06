@@ -120,12 +120,25 @@ namespace VideoGameOrderSystem.DataAccess.Repos
         public void AddProduct(int storeId)
         {
             var product = new Models.Product();
-            
-            Console.WriteLine();
-            Console.WriteLine("Please enter the product name:");
 
-            var name = Console.ReadLine();
-            product.Name = name;
+            string name;
+            while (true)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Please enter the product name:");
+
+                name = Console.ReadLine();
+                if (name.Equals("") || name.Equals(null))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Invalid Product Name...");
+                }
+                else
+                {
+                    product.Name = name;
+                    break;
+                }
+            }
 
             Console.WriteLine();
             Console.WriteLine("Please enter the product price:");

@@ -13,8 +13,6 @@ namespace VideoGameOrderSystem.DataAccess.Repos
         void RemoveOrder(int id);
         float OrderTotal(int orderID, IEnumerable<Models.OrderItems> oI, 
             IEnumerable<Models.Product> p);
-        void PrintCustomerHistory(int customerID);
-        void PrintStoreHistory(int storeID);
 
         IEnumerable<Models.OrderItems> GetOrderItems(int orderId);
         IEnumerable<Models.Product> GetOrderProducts(IEnumerable<Models.OrderItems> oI);
@@ -27,5 +25,14 @@ namespace VideoGameOrderSystem.DataAccess.Repos
         void RemoveProduct(int orderId, int id);
 
         Models.Product getProductByName(string name);
+        bool checkProduct(int productId, int orderId);
+
+        void PrintCustomerHistory(int customerID);
+        void PrintStoreHistory(int storeID);
+
+        // Order Statistics
+        void HighestAverageCustomer();
+        void HighestSumTotal();
+        void MostOrders();
     }
 }

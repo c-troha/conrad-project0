@@ -92,16 +92,16 @@ namespace VideoGameOrderSystem.DataAccess.Repos
                 var products = GetOrderProducts(items);
 
                 Console.WriteLine($"Order #: {o.Id}");
-                Console.WriteLine("{0,-10}{1,-35}{2,-15}{3,-10}",
-                    "ID", "Name", "Quantity", "Price");
-                Console.WriteLine("{0,-10}{1,-35}{2,-15}{3,-10}",
-                    "--", "----", "--------", "-----");
+                Console.WriteLine("{0,-10}{1,-25}{2,-15}{3,-10}{4,-25}{5,-10}",
+                    "ID", "Name", "Quantity", "Price", "Time Placed", "Store");
+                Console.WriteLine("{0,-10}{1,-25}{2,-15}{3,-10}{4,-25}{5,-10}",
+                    "--", "----", "--------", "-----", "-----------", "-----");
 
                 foreach (Models.Product p in products)
                 {
-                    Console.WriteLine("{0,-10}{1,-35}{2,-15}{3,-10}",
+                    Console.WriteLine("{0,-10}{1,-25}{2,-15}{3,-10}{4,-25}{5,-10}",
                         p.Id, p.Name, items.First(i => i.ProductId == p.Id).Quantity,
-                        p.Price);
+                        p.Price, o.TimePlaced, _dbContext.Store.First(s => s.Id == o.StoreId).Name);
                 }
 
                 Console.WriteLine();
@@ -126,16 +126,17 @@ namespace VideoGameOrderSystem.DataAccess.Repos
                 var products = GetOrderProducts(items);
 
                 Console.WriteLine($"Order #: {o.Id}");
-                Console.WriteLine("{0,-10}{1,-35}{2,-15}{3,-10}",
-                    "ID", "Name", "Quantity", "Price");
-                Console.WriteLine("{0,-10}{1,-35}{2,-15}{3,-10}",
-                    "--", "----", "--------", "-----");
+                Console.WriteLine("{0,-10}{1,-25}{2,-15}{3,-10}{4,-25}{5,-10}",
+                    "ID", "Name", "Quantity", "Price", "Time Placed", "Customer");
+                Console.WriteLine("{0,-10}{1,-25}{2,-15}{3,-10}{4,-25}{5,-10}",
+                    "--", "----", "--------", "-----", "-----------", "--------");
 
                 foreach (Models.Product p in products)
                 {
-                    Console.WriteLine("{0,-10}{1,-35}{2,-15}{3,-10}",
+                    var customer = _dbContext.Customer.First(c => c.Id == o.CustomerId);
+                    Console.WriteLine("{0,-10}{1,-25}{2,-15}{3,-10}{4,-25}{5,-10}",
                         p.Id, p.Name, items.First(i => i.ProductId == p.Id).Quantity,
-                        p.Price);
+                        p.Price, o.TimePlaced, customer.FirstName+ ' ' + customer.LastName);
                 }
 
                 Console.WriteLine();
@@ -275,6 +276,118 @@ namespace VideoGameOrderSystem.DataAccess.Repos
         public Models.Product getProductByName(string name)
         {
             return Mapping.MapO(_dbContext.Oproduct.First(p => p.Name.Equals(name)));
+        }
+
+        public bool checkProduct(int productId, int orderId)
+        {
+            return _dbContext.OrderItems.Any(i => i.ProductId == productId && i.OrderId == orderId);
+        }
+
+        public void HighestAverageCustomer()
+        {
+            float high = 0;
+            float temp = 0;
+            int count = 0;
+
+            Models.Customer best = new Models.Customer();
+
+            var customerRepo = new CustomerRepository(_dbContext);
+
+            var customers = customerRepo.GetAll().ToList();
+            var orders = GetAllOrders();
+
+            foreach (Models.Customer c in customers)
+            {
+                foreach (Models.Order o in orders.Where(ord => ord.CustomerId == c.Id))
+                {
+                    var items = GetOrderItems(o.Id).ToList();
+                    var products = GetOrderProducts(items);
+
+                    var orderTotal = OrderTotal(o.Id, items, products);
+
+                    temp += orderTotal;
+                    count++;
+                }
+
+                temp = temp / count;
+
+                if(temp > high)
+                {
+                    high = temp;
+                    best = c;
+                }
+            }
+
+            Console.WriteLine($"{best.FirstName + ' ' + best.LastName} had" +
+                $" the highest average \"Order Total\": ${high}");
+
+
+        }
+
+        public void HighestSumTotal()
+        {
+            float high = 0;
+            float temp = 0;
+
+            Models.Customer best = new Models.Customer();
+
+            var customerRepo = new CustomerRepository(_dbContext);
+
+            var customers = customerRepo.GetAll().ToList();
+            var orders = GetAllOrders();
+
+            foreach (Models.Customer c in customers)
+            {
+                foreach (Models.Order o in orders.Where(ord => ord.CustomerId == c.Id))
+                {
+                    var items = GetOrderItems(o.Id).ToList();
+                    var products = GetOrderProducts(items);
+
+                    var orderTotal = OrderTotal(o.Id, items, products);
+
+                    temp += orderTotal;
+                }
+
+                if (temp > high)
+                {
+                    high = temp;
+                    best = c;
+                }
+            }
+
+            Console.WriteLine($"{best.FirstName + ' ' + best.LastName} had" +
+                $" the highest \"Order Total\" sum: ${high}");
+        }
+
+        public void MostOrders()
+        {
+            float high = 0;
+            float temp = 0;
+
+            Models.Customer best = new Models.Customer();
+
+            var customerRepo = new CustomerRepository(_dbContext);
+
+            var customers = customerRepo.GetAll().ToList();
+            var orders = GetAllOrders();
+
+            foreach (Models.Customer c in customers)
+            {
+                foreach (Models.Order o in orders.Where(ord => ord.CustomerId == c.Id))
+                { 
+                    temp++;
+                }
+
+                if (temp > high)
+                {
+                    high = temp;
+                    best = c;
+                }
+            }
+
+            Console.WriteLine($"{best.FirstName + ' ' + best.LastName} had" +
+                $" the most orders with: {high}");
+            Console.WriteLine();
         }
     }
 }
