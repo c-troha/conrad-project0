@@ -14,5 +14,6 @@ namespace VideoGameOrderSystem.DataAccess.Repos
         bool ContainsId(int id);
         Models.Customer CreateNewCustomer();
         void UpdateLocation(int storeId, int customerId);
+
     }
 }

@@ -21,6 +21,7 @@ namespace VideoGameOrderSystem.ConsoleApp
             var dbContext = new OrderSystemContext(options);
             IStoreRepository storeRepository = new StoreRepository(dbContext);
             ICustomerRepository customerRepository = new CustomerRepository(dbContext);
+            IOrderRepository orderRepository = new OrderRepository(dbContext);
 
             Console.WriteLine("Video Game Order System");
 
@@ -108,7 +109,7 @@ namespace VideoGameOrderSystem.ConsoleApp
                                             Console.WriteLine("");
                                             Console.WriteLine("1. Place Order");
                                             Console.WriteLine("2. View Order History");
-                                            Console.WriteLine("3. Change Order Location");
+                                            Console.WriteLine("3. Change Store");
                                             Console.WriteLine("");
                                             Console.WriteLine("Please enter a valid option " +
                                                 "or press \"b\" to go back");
@@ -119,16 +120,152 @@ namespace VideoGameOrderSystem.ConsoleApp
                                             {
                                                 case "1":
                                                     // place order
+                                                    var stores = storeRepository.GetAllStores().ToList();
+
+                                                    Models.Order newOrder = new Models.Order();
+                                                    newOrder.CustomerId = id;
+                                                    newOrder.StoreId = customerRepository.GetCustomerById(id).StoreId;
+                                                    newOrder.TimePlaced = DateTime.Now;
+                                                    orderRepository.AddOrder(newOrder);
+
+                                                    var orders = orderRepository.GetAllOrders().ToList();
+
+                                                    bool flag6 = true;
+                                                    while (flag6)
+                                                    {
+                                                        int storeID = customerRepository.GetCustomerById(id).StoreId;
+
+                                                        var myStore = storeRepository.GetStoreById(storeID);
+                                                        var myInventory = storeRepository.GetInventory(storeID);
+                                                        var myProducts = storeRepository.GetInventoryProducts(myInventory);
+
+                                                        Console.WriteLine();
+                                                        Console.WriteLine($"Store: {myStore.Name}");
+                                                        Console.WriteLine();
+
+                                                        if (!storeRepository.InventoryIsEmpty(storeID))
+                                                        {
+
+                                                            Console.WriteLine("Inventory List");
+                                                            Console.WriteLine();
+                                                            Console.WriteLine("{0,-10}{1,-35}{2,-15}{3,-10}",
+                                                                "ID", "Name", "Quantity", "Price");
+                                                            Console.WriteLine("{0,-10}{1,-35}{2,-15}{3,-10}",
+                                                                "--", "----", "--------", "-----");
+
+                                                            foreach (Models.Product p in myProducts)
+                                                            {
+                                                                Console.WriteLine("{0,-10}{1,-35}{2,-15}{3,-10}",
+                                                                    p.Id, p.Name, myInventory.First(i => i.ProductId == p.Id).Quantity,
+                                                                    p.Price);
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            Console.WriteLine("Nothin in inventory...");
+                                                        }
+
+                                                        
+                                                        var myOrder = orders.Last();
+                                                        var myOrderItems = orderRepository.GetOrderItems(myOrder.Id);
+                                                        var orderProducts = orderRepository.GetOrderProducts(myOrderItems);
+                                                        if (!orderRepository.OrderIsEmpty(myOrder.Id))
+                                                        {
+                                                            Console.WriteLine();
+                                                            Console.WriteLine("Order Summary");
+                                                            Console.WriteLine();
+                                                            Console.WriteLine("{0,-10}{1,-35}{2,-15}{3,-10}",
+                                                                "ID", "Name", "Quantity", "Price");
+                                                            Console.WriteLine("{0,-10}{1,-35}{2,-15}{3,-10}",
+                                                                "--", "----", "--------", "-----");
+
+                                                            foreach (Models.Product p in orderProducts)
+                                                            {
+                                                                Console.WriteLine("{0,-10}{1,-35}{2,-15}{3,-10}",
+                                                                    p.Id, p.Name, myOrderItems.First(i => i.ProductId == p.Id).Quantity,
+                                                                    p.Price);
+                                                            }
+
+                                                            Console.WriteLine();
+                                                            Console.WriteLine($"Order Total: " +
+                                                                $"{orderRepository.OrderTotal(myOrder.Id, myOrderItems, orderProducts)}");
+
+
+                                                        }
+                                                        else
+                                                        {
+                                                            Console.WriteLine();
+                                                            Console.WriteLine("Your cart is empty.");
+                                                        }
+
+                                                        Console.WriteLine("");
+//----------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                        Console.WriteLine("1. Add item to order");
+                                                        Console.WriteLine("2. Remove item from order");
+                                                        Console.WriteLine("3. Submit Order");
+                                                        Console.WriteLine("");
+                                                        Console.WriteLine("Please enter a valid option " +
+                                                            "or press \"b\" to go back");
+
+                                                        var input3 = Console.ReadLine();
+
+                                                        switch (input3)
+                                                        {
+                                                            case "1":
+                                                                // Add Item to order
+                                                                orders = orderRepository.GetAllOrders().ToList();
+                                                                Console.WriteLine("Enter the ID of the product you wish to add:");
+                                                                int choice;
+                                                                if(int.TryParse(Console.ReadLine(), out choice))
+                                                                {
+                                                                    orderRepository.AddProduct(orders.Last().Id, myProducts.First(p => p.Id == choice));
+                                                                   
+                                                                    Console.WriteLine("");
+                                                                    Console.WriteLine("How many would you like to add?");
+
+                                                                    int val;
+                                                                    if (int.TryParse(Console.ReadLine(), out val))
+                                                                    {
+                                                                        //orderRepository.AddToOrder
+                                                                        orderRepository.AddToOrder(orders.Last().Id, myStore.LocationId, choice, val);
+                                                                    }
+                                                                }
+                                                                break;
+                                                            case "2":
+                                                                // Remove Item from order
+                                                                orders = orderRepository.GetAllOrders().ToList();
+                                                                Console.WriteLine("Enter the ID of the product you wish to Remove:");
+                                                                
+                                                                if (int.TryParse(Console.ReadLine(), out choice))
+                                                                {
+                                                                    //orderRepository.RemoveProduct(orders.Last().Id, myProducts.First(p => p.Id == choice));
+
+                                                                    //orderRepository.RemoveFromOrder
+                                                                    //orderRepository.AddToOrder(orders.Last().Id, myStore.LocationId, choice, val);
+                                                                }
+                                                                break;
+                                                            case "3":
+                                                                // Submit Order
+
+                                                                break;
+                                                            case "b":
+                                                                flag6 = false;
+                                                                break;
+                                                            default:
+                                                                break;
+
+                                                        }
+                                                    }
                                                     break;
+
                                                 case "2":
                                                     // print order history
+                                                    Console.WriteLine();
+                                                    orderRepository.PrintCustomerHistory(id);
                                                     break;
+
                                                 case "3":
-                                                    // Change customer location
-                                                    var stores = storeRepository.GetAllStores().ToList();
-                                                    Console.WriteLine();
-                                                    Console.WriteLine("Which store would you like to shop at?");
-                                                    Console.WriteLine();
+                                                    stores = storeRepository.GetAllStores().ToList();
 
                                                     if (stores.Count() == 0)
                                                     {
@@ -143,11 +280,16 @@ namespace VideoGameOrderSystem.ConsoleApp
                                                         }
                                                     }
 
+
+                                                    Console.WriteLine();
+                                                    Console.WriteLine("Which store would you like to shop at?");
+                                                    Console.WriteLine();
+
                                                     int newStore;
                                                     int.TryParse(Console.ReadLine(), out newStore);
                                                     customerRepository.UpdateLocation(newStore, id);
-
                                                     break;
+
                                                 case "b":
                                                     flag4 = false;
                                                     break;
@@ -274,6 +416,7 @@ namespace VideoGameOrderSystem.ConsoleApp
                                         Console.WriteLine("1. Add Product");
                                         Console.WriteLine("2. Remove Product");
                                         Console.WriteLine("3. Adjust Inventory");
+                                        Console.WriteLine("4. Order History");
                                         Console.WriteLine("Please enter a valid option or press \"b\" to go back");
                                         Console.WriteLine("");
 
@@ -335,6 +478,9 @@ namespace VideoGameOrderSystem.ConsoleApp
                                                 }
 
                                                 break;
+                                            case "4":
+                                                orderRepository.PrintStoreHistory(storeID);
+                                                break;
                                             case "b":
                                                 flag4 = false;
                                                 break;
@@ -381,7 +527,7 @@ namespace VideoGameOrderSystem.ConsoleApp
                             }
 
                             Console.WriteLine();
-                            Console.WriteLine("1: Delete Customer Record");
+                            Console.WriteLine("1: Order History");
                             Console.WriteLine("Please enter a valid option or press \"b\" to go back to the main menu");
                             Console.WriteLine("");
 
@@ -390,15 +536,13 @@ namespace VideoGameOrderSystem.ConsoleApp
                             switch(input)
                             {
                                 case "1":
-                                    // Delete Customer from database
-                                    Console.WriteLine("Please enter the ID of the customer you wish to delete?");
+                                    Console.WriteLine("Please enter the Customer ID: ");
                                     Console.WriteLine();
 
-                                    int delID;
-
-                                    if(int.TryParse(Console.ReadLine(), out delID))
+                                    int histID;
+                                    if (int.TryParse(Console.ReadLine(), out histID))
                                     {
-                                        customerRepository.RemoveCustomer(delID);
+                                        orderRepository.PrintCustomerHistory(histID);
                                     }
                                     break;
                                 case "b":

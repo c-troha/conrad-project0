@@ -6,23 +6,11 @@ namespace VideoGameOrderSystem.Models
 {
     public class Order
     {
-        private int _id;
+        public int Id { get; set; }
 
-        public Customer Customer { get; set; } = new Customer();
-        public Location StoreLocation { get; set; } = new Location();
+        public int CustomerId { get; set; }
+        public int StoreId { get; set; }
 
         public DateTime TimePlaced { get; set; }
-
-        public List<Product> Products { get; set; } = new List<Product>();
-
-        public int Id
-        {
-            get => _id;
-
-            set
-            {
-                _id = value;
-            }
-        }
     }
 }

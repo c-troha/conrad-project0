@@ -116,9 +116,25 @@ ALTER TABLE OS.IBundleItems ADD
 	CONSTRAINT FK_BundleItems_To_IBundles FOREIGN KEY (BundleID) REFERENCES OS.IBundles (ID),
 	CONSTRAINT FK_BundleItems_To_IProduct FOREIGN KEY (ProductID) REFERENCES OS.IProduct (ID);
 
+ALTER TABLE OS.OProduct ADD
+	InventoryID INT NOT NULL
+
+ALTER TABLE OS.Oproduct ADD
+	CONSTRAINT FK_Oproduct_To_Iproduct FOREIGN KEY (InventoryID) REFERENCES OS.IProduct (ID);
+
 
 SELECT * FROM OS.Inventory;
-SELECT * FROM OS.IProduct;
+SELECT * FROM OS.Iproduct
+
+SELECT * FROM OS.OrderItems;
+SELECT * FROM OS.Orders;
+SELECT * FROM OS.OProduct
+
+DELETE FROM OS.OrderItems 
+DELETE FROM OS.Orders
+DELETE FROM OS.OProduct
+
+SELECT * FROM OS.
 
 INSERT INTO OS.IProduct (Name, Price) VALUES
 	('Playstation 4', 299.99),

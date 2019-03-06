@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace VideoGameOrderSystem.DataAccess
@@ -34,6 +35,36 @@ namespace VideoGameOrderSystem.DataAccess
             LastName = customer.LastName,
             Birthday = customer.Birthday,
             StoreId = customer.StoreId,
+        };
+
+        public static Models.Order Map(Orders order) => new Models.Order
+        {
+            Id = order.Id,
+            StoreId = order.StoreId,
+            CustomerId = order.CustomerId,
+            TimePlaced = order.TimePlaced
+        };
+
+        public static Orders Map(Models.Order order) => new Orders
+        {
+            Id = order.Id,
+            StoreId = order.StoreId,
+            CustomerId = order.CustomerId,
+            TimePlaced = order.TimePlaced
+        };
+
+        public static Models.OrderItems Map(OrderItems order) => new Models.OrderItems
+        {
+            OrderId = order.OrderId,
+            Quantity = order.Quantity,
+            ProductId = order.ProductId
+        };
+
+        public static OrderItems Map(Models.OrderItems order) => new OrderItems
+        {
+            OrderId = order.OrderId,
+            Quantity = order.Quantity,
+            ProductId = order.ProductId
         };
 
         public static Models.Inventory Map(Inventory inv) => new Models.Inventory
@@ -77,5 +108,8 @@ namespace VideoGameOrderSystem.DataAccess
             Name = product.Name,
             Price = (decimal)product.Price
         };
+
+        public static IEnumerable<Models.Order> Map(IEnumerable<Orders> orders) => orders.Select(Map);
+        public static IEnumerable<Orders> Map(IEnumerable<Models.Order> orders) => orders.Select(Map);
     }
 }
